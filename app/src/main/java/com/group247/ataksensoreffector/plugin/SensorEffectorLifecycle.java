@@ -1,20 +1,16 @@
 package com.group247.ataksensoreffector.plugin;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
-import com.atakmap.android.maps.MapView;
-import com.atakmap.android.dropdown.DropDownMapComponent;
+import android.content.Intent;
 
-public class SensorEffectorLifecycle extends DropDownMapComponent {
+// Placeholder lifecycle receiver. Replace with ATAK DropDownMapComponent
+// once the ATAK SDK JAR is added to app/libs/.
+public class SensorEffectorLifecycle extends BroadcastReceiver {
 
     private static final String TAG = "SensorEffectorLifecycle";
 
     @Override
-    public void onCreate(Context context, android.content.Intent intent, MapView view) {
-        super.onCreate(context, intent, view);
-    }
-
-    @Override
-    protected void onDestroyImpl(Context context, MapView view) {
-        super.onDestroyImpl(context, view);
+    public void onReceive(Context context, Intent intent) {
     }
 }
