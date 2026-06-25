@@ -56,7 +56,10 @@ public class ThreatEvent {
     @SerializedName("threat_score")
     private double threatScore;
 
+    @SerializedName("lat")
     private double lat;
+
+    @SerializedName("lon")
     private double lon;
 
     @SerializedName("elevation_deg")
@@ -127,7 +130,12 @@ public class ThreatEvent {
      */
     public String toCotXml() {
         String how = "m-g";  // machine-generated
-        String type = cotType != null ? cotType : "a-u-G";
+        String type = escapeXml(cotType != null ? cotType : "a-u-G");
+        String safeEventId = escapeXml(eventId != null ? eventId : "unknown");
+        String safeTimestamp = escapeXml(timestampUtc != null ? timestampUtc : "");
+        String safeThreatClass = escapeXml(threatClass != null ? threatClass : "unknown");
+        String safeSensorId = escapeXml(sensorId != null ? sensorId : "unknown");
+        String safeZone = escapeXml(detectionZone != null ? detectionZone : "unknown");
         return String.format(
             "<event version='2.0' uid='RACK-%s' type='%s' time='%s' start='%s' stale='%s' how='%s'>"
             + "<point lat='%f' lon='%f' hae='%f' ce='9999999' le='9999999'/>"
@@ -136,13 +144,20 @@ public class ThreatEvent {
             + "<remarks>RACK FP: %s (score=%.2f) sensor=%s zone=%s</remarks>"
             + "</detail>"
             + "</event>",
-            eventId, type, timestampUtc, timestampUtc, timestampUtc, how,
+            safeEventId, type, safeTimestamp, safeTimestamp, safeTimestamp, how,
             lat, lon, altitudeMagl,
             headingDeg, velocityMps,
-            threatClass != null ? threatClass : "unknown", threatScore,
-            sensorId != null ? sensorId : "unknown",
-            detectionZone != null ? detectionZone : "unknown"
+            safeThreatClass, threatScore, safeSensorId, safeZone
         );
+    }
+
+    private static String escapeXml(String input) {
+        if (input == null) return "";
+        return input.replace("&", "&amp;")
+                     .replace("<", "&lt;")
+                     .replace(">", "&gt;")
+                     .replace("'", "&apos;")
+                     .replace("\"", "&quot;");
     }
 
     @Override

@@ -71,6 +71,7 @@ _manifests: dict[str, dict] = {}
 _ws_clients: list[web.WebSocketResponse] = []
 _start_time: float = time.time()
 _event_count: int = 0
+_MAX_EVENTS_BUFFER: int = 10_000
 
 DATA_DIR = Path(os.environ.get("RACK_DATA_DIR", Path(__file__).parent.parent / "data"))
 
@@ -153,9 +154,11 @@ async def ingest_event(request: "web.Request") -> "web.Response":
     # Validate physics bounds
     physics_issues = validate_physics_bounds(event)
 
-    # Store
+    # Store (cap in-memory buffer to prevent unbounded growth)
     _events.append(event)
     _event_count += 1
+    if len(_events) > _MAX_EVENTS_BUFFER:
+        _events[:] = _events[-_MAX_EVENTS_BUFFER:]
 
     # Broadcast to WebSocket clients
     await _broadcast_event(event)
@@ -198,6 +201,9 @@ async def ingest_batch(request: "web.Request") -> "web.Response":
             _event_count += 1
             accepted += 1
             await _broadcast_event(event)
+
+    if len(_events) > _MAX_EVENTS_BUFFER:
+        _events[:] = _events[-_MAX_EVENTS_BUFFER:]
 
     return web.json_response({
         "total": results["total"],

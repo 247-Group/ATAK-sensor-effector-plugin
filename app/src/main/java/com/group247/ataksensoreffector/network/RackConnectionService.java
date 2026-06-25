@@ -39,9 +39,10 @@ public class RackConnectionService extends Service implements RackApiClient.Even
     private RackApiClient apiClient;
     private ExecutorService executor;
     private Handler mainHandler;
-    private boolean isConnected = false;
+    private volatile boolean isConnected = false;
+    private volatile boolean destroyed = false;
     private final List<ThreatEvent> eventBuffer = new ArrayList<>();
-    private final List<ThreatEventCallback> callbacks = new ArrayList<>();
+    private final java.util.concurrent.CopyOnWriteArrayList<ThreatEventCallback> callbacks = new java.util.concurrent.CopyOnWriteArrayList<>();
 
     public interface ThreatEventCallback {
         void onThreatEvent(ThreatEvent event);
@@ -81,6 +82,8 @@ public class RackConnectionService extends Service implements RackApiClient.Even
 
     @Override
     public void onDestroy() {
+        destroyed = true;
+        mainHandler.removeCallbacksAndMessages(null);
         disconnect();
         executor.shutdown();
         super.onDestroy();
@@ -123,6 +126,7 @@ public class RackConnectionService extends Service implements RackApiClient.Even
     }
 
     private void scheduleReconnect() {
+        if (destroyed) return;
         mainHandler.postDelayed(this::connect, RECONNECT_DELAY_MS);
     }
 
