@@ -15,7 +15,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // RACK server defaults — override via SharedPreferences at runtime
-        buildConfigField "String", "DEFAULT_RACK_HOST", '"10.247.4.3"'
+        buildConfigField "String", "DEFAULT_RACK_HOST", '"10.247.4.44"'
         buildConfigField "int", "DEFAULT_RACK_PORT", "8790"
     }
 

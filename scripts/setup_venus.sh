@@ -26,7 +26,7 @@ set -euo pipefail
 VENV_PATH="/opt/venv/ml-rack"
 OLLAMA_PORT=11434
 ALLOWED_SUBNET="10.247.4.0/24"
-ALLOWED_HOST="10.247.4.3"
+ALLOWED_HOST="10.247.4.44"
 
 # ============================================================================
 # Protocol 1: Hardware, ZFS, and Network Discovery

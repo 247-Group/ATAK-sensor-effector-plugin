@@ -62,7 +62,7 @@ public class RackConnectionService extends Service implements RackApiClient.Even
         mainHandler = new Handler(Looper.getMainLooper());
 
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String host = prefs.getString("rack_host", "10.247.4.3");
+        String host = prefs.getString("rack_host", "10.247.4.44");
         int port = prefs.getInt("rack_port", 8790);
 
         apiClient = new RackApiClient(host, port);
