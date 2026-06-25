@@ -13,6 +13,10 @@ android {
         versionCode 1
         versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // RACK server defaults — override via SharedPreferences at runtime
+        buildConfigField "String", "DEFAULT_RACK_HOST", '"10.247.4.44"'
+        buildConfigField "int", "DEFAULT_RACK_PORT", "8790"
     }
 
     signingConfigs {
@@ -42,17 +46,36 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
 
-    packagingOptions {
-        exclude 'META-INF/INDEX.LIST'
-        exclude 'META-INF/DEPENDENCIES'
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    packaging {
+        resources {
+            excludes += ['META-INF/INDEX.LIST', 'META-INF/DEPENDENCIES']
+        }
     }
 }
 
 dependencies {
+    // ATAK SDK — place main.jar in app/libs/
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])
+
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
+
+    // OkHttp for RACK server communication
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+
+    // Gson for JSON serialization
+    implementation 'com.google.code.gson:gson:2.10.1'
+
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:5.8.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }

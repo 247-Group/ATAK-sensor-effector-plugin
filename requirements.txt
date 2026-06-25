@@ -1,0 +1,26 @@
+# RACK FP AI/ML Engine — Python Dependencies
+# Install: pip install -r requirements.txt
+
+# Core data stack
+numpy>=1.24
+pandas>=2.0
+pyarrow>=12.0
+
+# Schema validation
+jsonschema>=4.17
+
+# API server
+aiohttp>=3.9
+
+# Testing
+pytest>=7.0
+pytest-cov>=4.0
+
+# ML dependencies (optional for Sprint 1, required for Sprint 2+)
+# torch>=2.0
+# xgboost>=2.0
+# scikit-learn>=1.3
+# onnx>=1.14
+# onnxruntime>=1.16
+# onnxmltools>=1.12
+# onnxconverter-common>=1.14

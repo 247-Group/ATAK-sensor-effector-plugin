@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aicowboys.com/rack-fp/schemas/capability-manifest/v1.0.0",
+  "title": "CapabilityManifest",
+  "description": "Declares the capabilities, available actions, and current status of an ATAK FP plugin instance. Published by each plugin on startup and on state change. Consumed by the AI engine to determine what effector actions are available.",
+  "type": "object",
+  "required": [
+    "plugin_id",
+    "display_name",
+    "available_actions",
+    "current_status"
+  ],
+  "properties": {
+    "plugin_id": {
+      "type": "string",
+      "description": "Unique plugin identifier (reverse-domain, e.g., 'com.aicowboys.rack.fp').",
+      "pattern": "^[a-z][a-z0-9_.\\-]+$",
+      "minLength": 3,
+      "maxLength": 128
+    },
+    "display_name": {
+      "type": "string",
+      "description": "Human-readable plugin name shown in ATAK UI (e.g., 'RACK Force Protection AI').",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version of the plugin (e.g., '1.0.0').",
+      "pattern": "^\\d+\\.\\d+\\.\\d+.*$"
+    },
+    "available_actions": {
+      "type": "array",
+      "description": "List of effector/response actions this plugin can execute.",
+      "items": {
+        "type": "object",
+        "required": ["action_id", "action_label", "applicable_threat_classes"],
+        "properties": {
+          "action_id": {
+            "type": "string",
+            "description": "Machine-readable action identifier (e.g., 'redirect_uas', 'issue_alert', 'slew_camera').",
+            "pattern": "^[a-z][a-z0-9_]+$"
+          },
+          "action_label": {
+            "type": "string",
+            "description": "Human-readable label shown in ATAK UI (e.g., 'Redirect UAS to Target')."
+          },
+          "applicable_threat_classes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "air_uas_small",
+                "air_fixed_wing",
+                "ground_vehicle",
+                "ground_personnel",
+                "benign_wildlife",
+                "benign_aircraft",
+                "unknown",
+                "*"
+              ]
+            },
+            "description": "Threat classes this action applies to. Use '*' for universal actions."
+          },
+          "requires_params": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["param_id", "param_type"],
+              "properties": {
+                "param_id": {
+                  "type": "string",
+                  "description": "Parameter identifier (e.g., 'drone_ids', 'fpcon_level')."
+                },
+                "param_type": {
+                  "type": "string",
+                  "enum": ["string", "number", "boolean", "string[]", "coordinates"],
+                  "description": "Parameter data type."
+                },
+                "param_label": {
+                  "type": "string",
+                  "description": "Human-readable parameter label."
+                },
+                "required": {
+                  "type": "boolean",
+                  "default": true
+                }
+              }
+            },
+            "description": "Parameters required to execute this action."
+          },
+          "requires_human_gate": {
+            "type": "boolean",
+            "default": false,
+            "description": "If true, action requires human confirmation before execution (e.g., lethal engagement, FPCON escalation)."
+          },
+          "max_response_time_s": {
+            "type": "number",
+            "description": "Maximum acceptable response latency in seconds for this action."
+          }
+        }
+      }
+    },
+    "current_status": {
+      "type": "string",
+      "enum": ["online", "degraded", "offline", "initializing", "error"],
+      "description": "Current operational status of the plugin."
+    },
+    "connected_sensors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "sensor_id": { "type": "string" },
+          "sensor_type": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["connected", "disconnected", "degraded"]
+          },
+          "last_event_utc": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "description": "Sensors currently connected to this plugin instance."
+    },
+    "compute_profile": {
+      "type": "object",
+      "properties": {
+        "device": { "type": "string", "description": "Compute device (e.g., 'Orin NX', 'Jetson Nano', 'L40S')" },
+        "fp16_tflops": { "type": "number" },
+        "vram_gb": { "type": "number" },
+        "model_loaded": { "type": "string", "description": "Currently loaded AI model identifier." },
+        "inference_latency_ms": { "type": "number", "description": "Average inference latency in milliseconds." }
+      },
+      "description": "Compute resources available to this plugin instance."
+    },
+    "last_heartbeat_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of last heartbeat / status update."
+    }
+  },
+  "additionalProperties": false
+}
