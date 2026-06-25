@@ -91,3 +91,10 @@ jobs:
         run: python -m pytest tests/ -v --tb=short -x
         env:
           PYTHONPATH: .
+
+  build:
+    runs-on: ubuntu-latest
+    name: build
+    needs: [android-build, python-tests]
+    steps:
+      - run: echo "All checks passed"
