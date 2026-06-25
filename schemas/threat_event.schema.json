@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aicowboys.com/rack-fp/schemas/threat-event/v1.0.0",
+  "title": "ThreatEvent",
+  "description": "Normalized threat event schema — the single contract between all sensor adapters and the RACK FP AI engine. Every sensor adapter (EchoGuard, McQ RANGER, Bosch PTZ, Bulzi z.SCOUT, DFT fiber, JCEW/Drak) must produce events conforming to this schema.",
+  "type": "object",
+  "required": [
+    "event_id",
+    "sensor_id",
+    "sensor_type",
+    "track_id",
+    "bearing_deg",
+    "range_m",
+    "altitude_m_agl",
+    "velocity_mps",
+    "heading_deg",
+    "radar_cross_section_m2",
+    "track_age_s",
+    "track_confidence_0_1",
+    "timestamp_utc",
+    "raw_payload"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Globally unique event identifier (UUID v4)."
+    },
+    "sensor_id": {
+      "type": "string",
+      "description": "Unique identifier for the reporting sensor instance (e.g., 'ECHODYNE-01', 'MCQ-RANGER-NORTH').",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "sensor_type": {
+      "type": "string",
+      "enum": [
+        "echodyne_echoguard",
+        "mcq_ranger",
+        "bosch_ptz",
+        "bulzi_zscout",
+        "dft_fiber",
+        "jcew_drak",
+        "weartak",
+        "spotd",
+        "synthetic"
+      ],
+      "description": "Canonical sensor type producing this event."
+    },
+    "track_id": {
+      "type": "string",
+      "description": "Sensor-assigned track identifier. Persistent across updates for the same tracked object.",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "bearing_deg": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 360,
+      "description": "Bearing from sensor to target in degrees true north (0-360)."
+    },
+    "range_m": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100000,
+      "description": "Slant range from sensor to target in meters."
+    },
+    "altitude_m_agl": {
+      "type": "number",
+      "minimum": -100,
+      "maximum": 50000,
+      "description": "Target altitude above ground level in meters. Negative values indicate subsurface (tunnel). Ground targets should be 0-2m."
+    },
+    "velocity_mps": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1000,
+      "description": "Target ground speed in meters per second."
+    },
+    "heading_deg": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 360,
+      "description": "Target heading/course in degrees true north."
+    },
+    "radar_cross_section_m2": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 10000,
+      "description": "Radar cross section in square meters. 0.0 for non-radar sensors. EchoGuard spec ranges: sUAS 0.001-0.05, personnel 0.5-1.5, vehicle 5-100, fixed-wing 1-100."
+    },
+    "track_age_s": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Duration in seconds since the track was first established."
+    },
+    "track_confidence_0_1": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Sensor-reported track confidence (0.0 = no confidence, 1.0 = maximum). Used for fusion weighting."
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp of the event (e.g., '2026-06-15T14:30:00.000Z')."
+    },
+    "raw_payload": {
+      "type": "object",
+      "description": "Original sensor payload preserved verbatim. Schema is sensor-specific — the AI engine treats this as opaque metadata for debugging and audit.",
+      "additionalProperties": true
+    },
+    "threat_class": {
+      "type": "string",
+      "enum": [
+        "air_uas_small",
+        "air_fixed_wing",
+        "ground_vehicle",
+        "ground_personnel",
+        "benign_wildlife",
+        "benign_aircraft",
+        "unknown"
+      ],
+      "description": "AI-assigned or ground-truth threat classification label. Required for training data; may be null in live inference."
+    },
+    "threat_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "AI-computed threat probability score (0.0 = benign, 1.0 = confirmed hostile). Set by the classification model during inference."
+    },
+    "lat": {
+      "type": "number",
+      "minimum": -90,
+      "maximum": 90,
+      "description": "WGS-84 latitude of the target in decimal degrees."
+    },
+    "lon": {
+      "type": "number",
+      "minimum": -180,
+      "maximum": 180,
+      "description": "WGS-84 longitude of the target in decimal degrees."
+    },
+    "elevation_deg": {
+      "type": "number",
+      "minimum": -90,
+      "maximum": 90,
+      "description": "Elevation angle from sensor to target in degrees. Positive = above horizon."
+    },
+    "cot_type": {
+      "type": "string",
+      "description": "Cursor on Target type code for TAK integration (e.g., 'a-h-A-M-F-Q' for hostile UAS).",
+      "pattern": "^[a-z]-[a-z]-.*$"
+    },
+    "sensor_modality": {
+      "type": "string",
+      "enum": ["radar", "acoustic", "visual", "rf_passive", "seismic", "fiber_optic", "infrared", "multi"],
+      "description": "Primary sensing modality that produced this event."
+    },
+    "detection_zone": {
+      "type": "string",
+      "description": "Named defensive zone or sector where detection occurred (e.g., 'NORTH-PERIMETER', 'GATE-1').",
+      "maxLength": 64
+    },
+    "frequency_mhz": {
+      "type": "number",
+      "minimum": 0,
+      "description": "RF frequency in MHz (for RF-based sensors like Bulzi z.SCOUT, JCEW/Drak). 0 for non-RF sensors."
+    },
+    "signal_strength_dbm": {
+      "type": "number",
+      "description": "Signal strength in dBm (for RF-based sensors). Null for non-RF sensors."
+    }
+  },
+  "additionalProperties": false
+}

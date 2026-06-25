@@ -1,4 +1,4 @@
-name: CI — Build APK & Run Tests
+name: CI — Build APK, Run Tests, Python Pipeline
 
 on:
   pull_request:
@@ -7,8 +7,9 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  android-build:
     runs-on: ubuntu-latest
+    name: Android Build & Tests
 
     steps:
       - name: Checkout code
@@ -35,6 +36,10 @@ jobs:
       - name: Run unit tests
         run: ./gradlew test
 
+      - name: Run lint checks
+        run: ./gradlew lint
+        continue-on-error: true
+
       - name: Build debug APK
         run: ./gradlew assembleDebug
 
@@ -49,8 +54,37 @@ jobs:
           echo "$KEYSTORE_B64" | base64 --decode > /tmp/sensor-effector.keystore
           KEYSTORE_FILE=/tmp/sensor-effector.keystore ./gradlew assembleRelease
 
-      - name: Upload APK artifact
+      - name: Upload debug APK
         uses: actions/upload-artifact@v4
         with:
           name: debug-apk
           path: app/build/outputs/apk/debug/*.apk
+
+      - name: Upload release APK
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: release-apk
+          path: app/build/outputs/apk/release/*.apk
+        continue-on-error: true
+
+  python-tests:
+    runs-on: ubuntu-latest
+    name: Python Pipeline Tests
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pipeline tests
+        run: python -m pytest tests/ -v --tb=short -x
+        env:
+          PYTHONPATH: .

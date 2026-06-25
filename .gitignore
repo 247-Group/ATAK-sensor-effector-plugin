@@ -1,3 +1,4 @@
+# Android
 *.iml
 .gradle
 /local.properties
@@ -10,3 +11,33 @@
 *.keystore
 *.jks
 local.properties
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.eggs/
+dist/
+*.egg
+.venv/
+venv/
+
+# ML models (generated, not tracked)
+models/
+*.onnx
+*.xgb
+*.pt
+*.pth
+
+# Data (generated, large files)
+data/synthetic/*.parquet
+
+# Secrets
+config/.secrets.yaml
+.env
+
+# IDE
+.vscode/
+*.swp
+*.swo
