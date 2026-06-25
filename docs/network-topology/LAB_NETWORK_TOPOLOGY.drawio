@@ -1,0 +1,83 @@
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="rack-lab-topo" name="RACK Lab Topology">
+    <mxGraphModel dx="1100" dy="760" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" value="RACK Sensor &amp; Effector — Sprint 1 Lab Topology (RPDT-16)&#10;Solar Storm dev lab · sensors bridged from PacStar kit via TUT · TAK 5.7-RELEASE43" style="text;html=1;align=left;verticalAlign=middle;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="900" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Remote clients zone -->
+        <mxCell id="z_remote" value="Remote (Internet)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;verticalAlign=top;fontStyle=2;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="240" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="eng" value="Sprint engineers (laptops)&#10;WireGuard clients&#10;Danny · Mike · Demari · Cullen&#10;WG 10.247.5.x" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;" vertex="1" parent="1">
+          <mxGeometry x="60" y="130" width="200" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="tab" value="Samsung Galaxy Tab Active5&#10;EUD — ATAK&#10;enrolls vs Lab TAK :8446" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;" vertex="1" parent="1">
+          <mxGeometry x="60" y="250" width="200" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Jackal edge -->
+        <mxCell id="jackal" value="Jackal&#10;OpenBSD PF firewall&#10;WireGuard server&#10;WG 10.247.5.1 · ext 38.97.126.66:61394/udp" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;" vertex="1" parent="1">
+          <mxGeometry x="330" y="180" width="200" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- Solar Storm zone -->
+        <mxCell id="z_ss" value="Solar Storm (Cogent / Waltham colo) — 10.247.0.0/16" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;verticalAlign=top;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="580" y="90" width="430" height="500" as="geometry" />
+        </mxCell>
+        <mxCell id="labtak" value="Solar Storm TAK (VM 100)&#10;&quot;TAKServer-RHEL8&quot; · Pluto / N3 — existing SS TAK, upgraded&#10;10.247.3.2 (ext 38.97.126.70)&#10;takserver-5.7-RELEASE43 · RHEL 8.10&#10;mTLS 8089 · admin 8443 · enroll 8446 · TUT in 8087&#10;federation 9001 (off)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" vertex="1" parent="1">
+          <mxGeometry x="600" y="130" width="240" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="gpu" value="GPU compute — N4 (10.247.4.0/24)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FCE4D6;strokeColor=#D79B00;verticalAlign=top;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="600" y="300" width="390" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="frith" value="FRITH&#10;10.247.4.3 · Ollama :11434 (→ loopback)&#10;36 models · Chris's locked GPU box" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;" vertex="1" parent="1">
+          <mxGeometry x="620" y="340" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="mikebox" value="Mike's L40 box (RPDT-14)&#10;FRITH clone · dedicated training env&#10;zfs-snapshotted · TBD IP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="440" width="240" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="phobos" value="Phobos 10.247.4.4&#10;Hyperion 10.247.4.254&#10;(GPU host / guest)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;" vertex="1" parent="1">
+          <mxGeometry x="620" y="525" width="240" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- TUT bridge -->
+        <mxCell id="tut" value="TUT host&#10;Universal TAK Translator&#10;bridges PacStar ↔ lab&#10;sensor API/binary → CoT&#10;(also tut.247tak.com:443)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="150" width="200" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- PacStar tactical zone -->
+        <mxCell id="z_pac" value="PacStar tactical kit — 10.100.0.0/24 (not re-IP'd; bridged via TUT)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;verticalAlign=top;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="320" width="500" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="echo" value="Echodyne EchoGuard MESA-002788&#10;K-band MESA radar · SW 17.1.4&#10;10.100.0.201 · TCP 23 (CLI, held open) + 29982 (tracks)&#10;PROVEN: 466 CoT / 19 tracks (2026-05-08)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="360" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="bosch" value="Bosch MIC 7100i PTZ camera (planned effector)&#10;10.100.0.149 (or VLAN2 10.100.2.x — conflict)&#10;RTSP 554 · ONVIF 80/443 · RCP+ 1756&#10;PTZ slew-to-cue NOT yet integrated" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="460" width="320" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="jetson" value="PacStar 451 / Jetson Nano&#10;edge compute · IPMI 10.100.0.11" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="360" width="120" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Edges -->
+        <mxCell id="e1" value="WireGuard UDP 61394" style="endArrow=classic;html=1;strokeColor=#6C8EBF;fontSize=10;" edge="1" parent="1" source="eng" target="jackal"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" value="ATAK enroll 8446 (mTLS)" style="endArrow=classic;html=1;strokeColor=#6C8EBF;fontSize=10;" edge="1" parent="1" source="tab" target="jackal"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" value="mTLS 8089/8443/8446" style="endArrow=classic;html=1;strokeColor=#D6B656;fontSize=10;" edge="1" parent="1" source="jackal" target="labtak"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" value="SSH -L 11434 (Ollama)" style="endArrow=classic;html=1;strokeColor=#D79B00;fontSize=10;dashed=1;" edge="1" parent="1" source="jackal" target="frith"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" value="TCP 23 + 29982" style="endArrow=classic;html=1;strokeColor=#82B366;fontSize=10;" edge="1" parent="1" source="tut" target="echo"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" value="RTSP/ONVIF (planned)" style="endArrow=classic;html=1;strokeColor=#82B366;fontSize=10;dashed=1;" edge="1" parent="1" source="tut" target="bosch"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" value="CoT → 8089" style="endArrow=classic;html=1;strokeColor=#9673A6;fontSize=10;fontStyle=1;" edge="1" parent="1" source="tut" target="labtak"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend" value="Legend&#10;━━ solid = working / wired   ┄┄ dashed = planned / not yet live&#10;Yellow = TAK   Green = sensor/effector   Orange = GPU compute&#10;Blue = client/EUD   Red = firewall/edge   Purple = TUT bridge" style="text;html=1;align=left;verticalAlign=top;fontSize=11;rounded=1;fillColor=#FFFFFF;strokeColor=#666666;spacing=6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="620" width="600" height="90" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
